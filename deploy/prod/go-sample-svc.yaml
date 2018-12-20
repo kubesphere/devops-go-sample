@@ -12,7 +12,7 @@ spec:
     port: 80
     protocol: TCP
     targetPort: 8080
-    nodePort: 30980
+    nodePort: 31980
   selector:
     app: kubesphere
     component: ks-go-sample

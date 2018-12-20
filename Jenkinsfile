@@ -14,7 +14,7 @@ pipeline {
     DOCKER_REPO_NAMESPACE = 'runzexia'
     GIT_ACCOUNT = 'runzexia'
     APP_NAME = 'devops-go-sample'
-    DOCKER_REPO_ADDRESS = 'harbor.kubesphere.io:30280'
+    DOCKER_REPO_ADDRESS = 'harbor.devops.kubesphere:30280'
     GIT_ADDRESS = ''
   }
   stages {

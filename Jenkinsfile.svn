@@ -22,7 +22,6 @@ pipeline {
         checkout(scm)
       }
     }
-    stage('')
     stage('unit test') {
       steps {
         container('go') {
@@ -45,9 +44,8 @@ pipeline {
     }
     stage('push latest'){
        when{
-         anyOf{
-             branch 'trunk';
-             branch 'tags.*'
+         expression{
+            return env.BRANCH_NAME =~ /trunk.*/ || env.BRANCH_NAME =~ /tags\/.*/
          }
        }
        steps{
@@ -59,9 +57,8 @@ pipeline {
     }
     stage('deploy to dev') {
       when{
-         anyOf{
-            branch 'trunk';
-            branch 'tags.*'
+         expression{
+            return env.BRANCH_NAME =~ /trunk.*/ || env.BRANCH_NAME =~ /tags\/.*/
          }
       }
       steps {
@@ -71,19 +68,23 @@ pipeline {
     }
     stage('push with tag'){
       when{
-         branch 'tags.*'
+         expression{
+            return  env.BRANCH_NAME =~ /tags\/.*/
+         }
       }
       steps {
          container('go'){
          input(id: 'release-image-with-tag', message: 'release image with tag?')
          sh "docker tag  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:SNAPSHOT-$REAL_BRANCH_NAME-$BUILD_NUMBER $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:$REAL_BRANCH_NAME"
-         sh "docker push  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:${env.$REAL_BRANCH_NAME}"
+         sh "docker push  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:$REAL_BRANCH_NAME"
          }
       }
     }
     stage('deploy to production') {
       when{
-         branch 'tags.*'
+         expression{
+            return  env.BRANCH_NAME =~ /tags\/.*/
+         }
       }
       steps {
         input(id: 'deploy-to-production', message: 'deploy to production?')

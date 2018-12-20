@@ -1,3 +1,7 @@
+def getBranchNameFromEnv(branch) {
+  return branch.split('/').last()
+}
+
 pipeline {
   agent {
     node {
@@ -10,6 +14,7 @@ pipeline {
     DOCKER_REPO_NAMESPACE = 'runzexia'
     APP_NAME = 'devops-go-sample'
     DOCKER_REPO_ADDRESS = 'harbor.devops.kubesphere:30280'
+    REAL_BRANCH_NAME = getBranchNameFromEnv(env.BRANCH_NAME)
   }
   stages {
     stage('checkout scm') {
@@ -17,6 +22,7 @@ pipeline {
         checkout(scm)
       }
     }
+    stage('')
     stage('unit test') {
       steps {
         container('go') {
@@ -28,10 +34,10 @@ pipeline {
     stage('build & push snapshot') {
       steps {
         container('go') {
-          sh 'docker build -t $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER .'
+          sh 'docker build -t $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:SNAPSHOT-$REAL_BRANCH_NAME-$BUILD_NUMBER .'
           withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_REPO_CREDENTIAL_ID" ,)]) {
             sh 'echo "$DOCKER_PASSWORD" | docker login $DOCKER_REPO_ADDRESS -u "$DOCKER_USERNAME" --password-stdin'
-            sh 'docker push  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER '
+            sh 'docker push  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:SNAPSHOT-$REAL_BRANCH_NAME-$BUILD_NUMBER '
           }
         }
 
@@ -46,7 +52,7 @@ pipeline {
        }
        steps{
          container('go'){
-           sh 'docker tag  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:latest '
+           sh 'docker tag  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:SNAPSHOT-$REAL_BRANCH_NAME-$BUILD_NUMBER $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:latest '
            sh 'docker push  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:latest '
          }
        }
@@ -70,8 +76,8 @@ pipeline {
       steps {
          container('go'){
          input(id: 'release-image-with-tag', message: 'release image with tag?')
-         sh "docker tag  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:${env.BRANCH_NAME}"
-         sh "docker push  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:${env.BRANCH_NAME}"
+         sh "docker tag  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:SNAPSHOT-$REAL_BRANCH_NAME-$BUILD_NUMBER $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:${env.BRANCH_NAME}"
+         sh "docker push  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:${env.$REAL_BRANCH_NAME}"
          }
       }
     }

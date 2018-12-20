@@ -61,7 +61,7 @@ pipeline {
       }
       steps {
         input(id: 'deploy-to-dev', message: 'deploy to dev?', submitter: 'runzexia' )
-        kubernetesDeploy(configs: 'deploy/dev/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+        kubernetesDeploy(configs: 'deploy/git/dev/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
       }
     }
     stage('push with tag'){
@@ -92,7 +92,7 @@ pipeline {
       }
       steps {
         input(id: 'deploy-to-production', message: 'deploy to production?')
-        kubernetesDeploy(configs: 'deploy/prod/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+        kubernetesDeploy(configs: 'deploy/git/prod/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
       }
     }
   }

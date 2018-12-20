@@ -26,7 +26,7 @@ pipeline {
     stage('unit test') {
       steps {
         container('go') {
-          sh 'go test ./...'
+          sh 'CGO_ENABLED=0 go test ./...'
         }
 
       }

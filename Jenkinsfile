@@ -49,7 +49,7 @@ pipeline {
          branch 'master'
        }
        steps{
-         container('nodejs'){
+         container('go'){
            sh 'docker tag  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:latest '
            sh 'docker push  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:latest '
          }
@@ -71,7 +71,7 @@ pipeline {
         }
       }
       steps {
-         container('nodejs'){
+         container('go'){
          input(id: 'release-image-with-tag', message: 'release image with tag?')
            withCredentials([usernamePassword(credentialsId: "$GIT_CREDENTIAL_ID", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
              sh 'git config --global user.email "kubesphere@yunify.com" '

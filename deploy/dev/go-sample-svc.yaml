@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kubesphere
+    component: ks-go-sample
+  name: ks-go-sample
+  namespace: kubesphere-go-prod
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+    nodePort: 30880
+  selector:
+    app: kubesphere
+    component: ks-go-sample
+    tier: backend
+  sessionAffinity: None
+  type: NodePort

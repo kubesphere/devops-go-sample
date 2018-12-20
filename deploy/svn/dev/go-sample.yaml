@@ -6,7 +6,7 @@ metadata:
     component: ks-go-sample
     tier: backend
   name: ks-go-sample
-  namespace: kubesphere-go-prod
+  namespace: kubesphere-go-dev
 spec:
   progressDeadlineSeconds: 600
   replicas: 1

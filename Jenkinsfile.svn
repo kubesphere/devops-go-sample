@@ -76,7 +76,7 @@ pipeline {
       steps {
          container('go'){
          input(id: 'release-image-with-tag', message: 'release image with tag?')
-         sh "docker tag  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:SNAPSHOT-$REAL_BRANCH_NAME-$BUILD_NUMBER $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:${env.BRANCH_NAME}"
+         sh "docker tag  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:SNAPSHOT-$REAL_BRANCH_NAME-$BUILD_NUMBER $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:$REAL_BRANCH_NAME"
          sh "docker push  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:${env.$REAL_BRANCH_NAME}"
          }
       }

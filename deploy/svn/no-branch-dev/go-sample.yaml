@@ -23,7 +23,7 @@ spec:
         tier: backend
     spec:
       containers:
-        image: $DOCKER_REPO_ADDRESS/DOCKER_REPO_NAMESPACE/$APP_NAME:${env.BRANCH_NAME}
+        image: $DOCKER_REPO_ADDRESS/DOCKER_REPO_NAMESPACE/$APP_NAME:SNAPSHOT-CRON-BUILD-$BUILD_NUMBER
         imagePullPolicy: Always
         name: ks-go
         ports:

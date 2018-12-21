@@ -15,7 +15,7 @@ pipeline {
     GIT_ACCOUNT = 'runzexia'
     APP_NAME = 'devops-go-sample'
     DOCKER_REPO_ADDRESS = 'harbor.devops.kubesphere:30280'
-    GIT_ADDRESS = 'http://gitlab.gitlab.devops.kubesphere'
+    GIT_ADDRESS = 'http://gitlab.gitlab.devops.kubesphere:30080'
   }
   stages {
     stage('checkout scm') {

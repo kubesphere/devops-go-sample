@@ -59,7 +59,7 @@ pipeline {
         branch 'master'
       }
       steps {
-        input(id: 'deploy-to-dev', message: 'deploy to dev?', submitter: 'runzexia' )
+        input(id: 'deploy-to-dev', message: 'deploy to dev?')
         kubernetesDeploy(configs: 'deploy/git/dev/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
       }
     }

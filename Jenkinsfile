@@ -76,7 +76,7 @@ pipeline {
              sh 'git config --global user.email "kubesphere@yunify.com" '
              sh 'git config --global user.name "kubesphere" '
              sh "git tag -a ${params.TAG_NAME} -m \"${params.TAG_NAME}\" "
-             sh 'git push https://$GIT_USERNAME:$GIT_PASSWORD@GIT_ADDRESS/$GIT_ACCOUNT/$APP_NAME.git --tags'
+             sh 'git push https://$GIT_USERNAME:$GIT_PASSWORD@$GIT_ADDRESS/$GIT_ACCOUNT/$APP_NAME.git --tags'
            }
          sh "docker tag  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:${params.TAG_NAME}"
          sh "docker push  $DOCKER_REPO_ADDRESS/$DOCKER_REPO_NAMESPACE/$APP_NAME:${params.TAG_NAME}"

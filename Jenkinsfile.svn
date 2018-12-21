@@ -11,9 +11,9 @@ pipeline {
   environment {
     DOCKER_REPO_CREDENTIAL_ID = 'docker-repo-id'
     KUBECONFIG_CREDENTIAL_ID = 'demo-kubeconfig'
-    DOCKER_REPO_NAMESPACE = 'runzexia'
+    DOCKER_REPO_NAMESPACE = 'kubesphere'
     APP_NAME = 'devops-go-sample'
-    DOCKER_REPO_ADDRESS = 'harbor.devops.kubesphere:30280'
+    DOCKER_REPO_ADDRESS = 'harbor.devops.kubesphere.local:30280'
     REAL_BRANCH_NAME = getBranchNameFromEnv(env.BRANCH_NAME)
   }
   stages {
@@ -62,7 +62,7 @@ pipeline {
          }
       }
       steps {
-        input(id: 'deploy-to-dev', message: 'deploy to dev?', submitter: 'runzexia' )
+        input(id: 'deploy-to-dev', message: 'deploy to dev?')
         kubernetesDeploy(configs: 'deploy/svn/dev/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
       }
     }

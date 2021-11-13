@@ -1,0 +1,42 @@
+apiVersion: types.kubefed.io/v1beta1
+kind: FederatedDeployment
+metadata:
+  namespace: $MULTI_CLUSTER_PROJECT_NAME
+  name: multi-cluster-devops-go-sample
+  labels:
+    app: multi-cluster-devops-go-sample
+spec:
+  placement:
+    clusters:
+      - name: host
+      - name: $MEMBER_CLUSTER_NAME
+  template:
+    metadata:
+      labels:
+        app: multi-cluster-devops-go-sample
+      annotations:
+        kubesphere.io/containerSecrets: null
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: multi-cluster-devops-go-sample
+      template:
+        metadata:
+          labels:
+            app: multi-cluster-devops-go-sample
+        spec:
+          containers:
+            - name: go
+              imagePullPolicy: IfNotPresent
+              image: $REGISTRY/$DOCKERHUB_USERNAME/$APP_NAME
+          serviceAccount: default
+          affinity: {}
+          initContainers: []
+          volumes: []
+          imagePullSecrets: null
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 25%
+          maxSurge: 25%

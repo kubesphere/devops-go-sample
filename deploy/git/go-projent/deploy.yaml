@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: $PROJECT_NAME
+  name: devops-go-sample
+  labels:
+    app: devops-go-sample
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: devops-go-sample
+  template:
+    metadata:
+      labels:
+        app: devops-go-sample
+    spec:
+      containers:
+      - name: go
+        image: $REGISTRY/$DOCKERHUB_USERNAME/$APP_NAME
